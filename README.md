@@ -1,2 +1,2 @@
-# d3testwork
-Repository containing D3js test work
+# d3js projects
+Repository containing a collection of D3js projects
