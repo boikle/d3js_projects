@@ -1,7 +1,10 @@
+import { randomDataGenerator } from './random_data_generator.js';
+
+// simpleBarGraph - generates a bar-graph 
 class simpleBarGraph {
 
 	createGraph() {
-		let sample_data = [8.3,5.0,2.1,0.0,0.0,0.0,3.2,6.8,9.1,0.0,1.1,7.9,6.2,2.0,0.0,0.0,0.0,0.0,5.0,5.2,2.1];
+		let sample_data = randomDataGenerator();
 		let margin = {
 			"top": 20,
 			"right": 20,
