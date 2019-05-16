@@ -9,7 +9,7 @@ class simpleBarGraph {
 			"top": 20,
 			"right": 20,
 			"bottom": 20,
-			"left": 20
+			"left": 30
 		};
 		let height = 400 - margin.top - margin.bottom;
 		let width = 800 - margin.left - margin.right;
@@ -18,12 +18,20 @@ class simpleBarGraph {
 		let bandWidth = width / sample_data.length;
 
 		let scaleX = d3.scaleLinear()
-			.domain([d3.min(sample_data), d3.max(sample_data)])
+			.domain([0, sample_data.length])
 			.range([0, width]);
 	
 		let scaleY = d3.scaleLinear()
 			.domain([d3.min(sample_data), d3.max(sample_data)])
 			.range([height, 0]);
+
+		let xAxis = g => g
+			.attr('transform', 'translate(' + margin.left + ',' + (height + margin.bottom) + ')')
+			.call(d3.axisBottom().ticks(10).scale(scaleX));
+
+		let yAxis = g => g
+			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+			.call(d3.axisLeft().ticks(5).scale(scaleY));
 
 		let svg = d3.select("svg");
 
@@ -48,6 +56,14 @@ class simpleBarGraph {
 			.attr('height', function(d){
 				return height - scaleY(d);
 			});
+
+		// Add x axis
+		svg.append('g')
+			.call(xAxis);
+
+		// Add y axis
+		svg.append('g')
+			.call(yAxis);
 	}
 }
 
