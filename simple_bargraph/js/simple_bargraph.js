@@ -4,7 +4,7 @@ import { randomDataGenerator } from './random_data_generator.js';
 class simpleBarGraph {
 
 	createGraph() {
-		let sample_data = randomDataGenerator();
+		let sampleData = randomDataGenerator();
 		let margin = {
 			"top": 20,
 			"right": 20,
@@ -13,16 +13,17 @@ class simpleBarGraph {
 		};
 		let height = 400 - margin.top - margin.bottom;
 		let width = 800 - margin.left - margin.right;
+		let barPadding = 1;
 		let fillColour = "#2A7F64";
 
-		let bandWidth = width / sample_data.length;
+		let bandWidth = width / sampleData.length;
 
 		let scaleX = d3.scaleLinear()
-			.domain([0, sample_data.length])
+			.domain([0, sampleData.length])
 			.range([0, width]);
 	
 		let scaleY = d3.scaleLinear()
-			.domain([d3.min(sample_data), d3.max(sample_data)])
+			.domain([d3.min(sampleData), d3.max(sampleData)])
 			.range([height, 0]);
 
 		let xAxis = g => g
@@ -44,15 +45,15 @@ class simpleBarGraph {
 		svg.append('g')
 			.attr('fill', fillColour)
 			.selectAll('rect')
-			.data(sample_data)
+			.data(sampleData)
 			.join('rect')
 			.attr('x', function(d,i){
-				return i * bandWidth + margin.left;
+				return i * bandWidth + margin.left + barPadding;
 			})
 			.attr('y', function(d){
 				return scaleY(d) + margin.top;
 			})
-			.attr('width', bandWidth)
+			.attr('width', bandWidth - barPadding)
 			.attr('height', function(d){
 				return height - scaleY(d);
 			});
