@@ -17,40 +17,34 @@ class simpleBarGraph {
 		this.fillColour = "#2A7F64";
 		this.sampleData = randomDataGenerator();
 		this.bandWidth = this.width / this.sampleData.length;
-	}
 
-	static setSVGDimensions(svg, width, height, margin) {
-		// Set the dimensions of the SVG 
-		svg.attr('width', (width + margin.left + margin.right) + 'px')
-			.attr('height', (height + margin.top + margin.bottom) + 'px')
+		this.svg = d3.select("svg")
+			.attr('width', (this.width + this.margin.left + this.margin.right) + 'px')
+			.attr('height', (this.height + this.margin.top + this.margin.bottom) + 'px')
 			.classed('bargraph', true);
-	}
 
-	createGraph() {
-		let _this = this;
-
-		let scaleX = d3.scaleLinear()
+		this.scaleX = d3.scaleLinear()
 			.domain([0, this.sampleData.length])
 			.range([0, this.width]);
 	
-		let scaleY = d3.scaleLinear()
+		this.scaleY = d3.scaleLinear()
 			.domain([d3.min(this.sampleData), d3.max(this.sampleData)])
 			.range([this.height, 0]);
 
-		let xAxis = g => g
+		this.xAxis = g => g
 			.attr('transform', 'translate(' + this.margin.left + ',' + (this.height + this.margin.bottom) + ')')
-			.call(d3.axisBottom().ticks(10).scale(scaleX));
+			.call(d3.axisBottom().ticks(10).scale(this.scaleX));
 
-		let yAxis = g => g
+		this.yAxis = g => g
 			.attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
-			.call(d3.axisLeft().ticks(5).scale(scaleY));
+			.call(d3.axisLeft().ticks(5).scale(this.scaleY));
+	}
 
-		let svg = d3.select("svg");
-
-		this.constructor.setSVGDimensions(svg, this.width, this.height, this.margin);
+	draw() {
+		let _this = this;
 
 		// Add a bar for each of the sample data values
-		svg.append('g')
+		this.svg.append('g')
 			.attr('fill', this.fillColour)
 			.selectAll('rect')
 			.data(this.sampleData)
@@ -59,20 +53,20 @@ class simpleBarGraph {
 				return i * _this.bandWidth + _this.margin.left + _this.barPadding;
 			})
 			.attr('y', function(d){
-				return scaleY(d) + _this.margin.top;
+				return _this.scaleY(d) + _this.margin.top;
 			})
 			.attr('width', this.bandWidth - this.barPadding)
 			.attr('height', function(d){
-				return _this.height - scaleY(d);
+				return _this.height - _this.scaleY(d);
 			});
 
 		// Add x axis
-		svg.append('g')
-			.call(xAxis);
+		this.svg.append('g')
+			.call(this.xAxis);
 
 		// Add y axis
-		svg.append('g')
-			.call(yAxis);
+		this.svg.append('g')
+			.call(this.yAxis);
 	}
 }
 
