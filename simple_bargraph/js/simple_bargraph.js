@@ -38,17 +38,37 @@ class simpleBarGraph {
 		this.yAxis = g => g
 			.attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
 			.call(d3.axisLeft().ticks(5).scale(this.scaleY));
+
+		// Add x axis
+		this.svg.append('g')
+			.call(this.xAxis);
+
+		// Add y axis
+		this.svg.append('g')
+			.call(this.yAxis);
+
+		// Add container for bars
+		this.svg.append('g')
+			.attr('id', 'bar_container');
+	}
+
+	regenData() {
+		this.sampleData = randomDataGenerator();
 	}
 
 	draw() {
 		let _this = this;
 
-		// Add a bar for each of the sample data values
-		this.svg.append('g')
-			.attr('fill', this.fillColour)
+		// Select all rectangles
+		let bars = d3.select('#bar_container')
 			.selectAll('rect')
-			.data(this.sampleData)
-			.join('rect')
+			.data(this.sampleData);
+
+		// Enter selection and add/update rectangles
+		bars.enter()
+			.append('rect')
+			.merge(bars)
+			.attr('fill', this.fillColour)
 			.attr('x', function(d,i){
 				return i * _this.bandWidth + _this.margin.left + _this.barPadding;
 			})
@@ -60,13 +80,8 @@ class simpleBarGraph {
 				return _this.height - _this.scaleY(d);
 			});
 
-		// Add x axis
-		this.svg.append('g')
-			.call(this.xAxis);
-
-		// Add y axis
-		this.svg.append('g')
-			.call(this.yAxis);
+		// Exit and remove old bars
+		bars.exit().remove();
 	}
 }
 
