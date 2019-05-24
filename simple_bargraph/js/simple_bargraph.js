@@ -14,7 +14,6 @@ class simpleBarGraph {
 		this.height = 400 - this.margin.top - this.margin.bottom;
 		this.width = 800 - this.margin.left - this.margin.right;
 		this.barPadding = 1;
-		this.fillColour = "#2A7F64";
 		this.sampleData = randomDataGenerator();
 		this.bandWidth = this.width / this.sampleData.length;
 
@@ -30,6 +29,8 @@ class simpleBarGraph {
 		this.scaleY = d3.scaleLinear()
 			.domain([d3.min(this.sampleData), d3.max(this.sampleData)])
 			.range([this.height, 0]);
+
+		this.colourScale = d3.scaleSequential(d3.interpolateBlues);
 
 		this.xAxis = g => g
 			.attr('transform', 'translate(' + this.margin.left + ',' + (this.height + this.margin.bottom) + ')')
@@ -73,7 +74,9 @@ class simpleBarGraph {
 			.append('rect')
 			.merge(bars)
 			.transition()
-			.attr('fill', this.fillColour)
+			.attr('fill', function(d){
+				return _this.colourScale(d);
+			})
 			.attr('x', function(d,i){
 				return i * _this.bandWidth + _this.margin.left + _this.barPadding;
 			})
