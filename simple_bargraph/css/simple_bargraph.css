@@ -3,3 +3,7 @@
     padding: 5px;
     width: max-content;
 }
+
+#control_panel button {
+	margin: 0px 2px;
+}

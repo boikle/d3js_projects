@@ -1,5 +1,5 @@
 // Regenerate Data Control
-function generatorBtn(graph) {
+export function generatorBtn(graph) {
 	let controlPanel = document.getElementById('control_panel'); 
 	let button = document.createElement('button');
 	button.setAttribute('type','button');
@@ -14,4 +14,19 @@ function generatorBtn(graph) {
 	}
 }
 
-export { generatorBtn };
+// Sort Data
+export function sortBtn(graph) {
+	let controlPanel = document.getElementById('control_panel'); 
+	let button = document.createElement('button');
+	button.setAttribute('type','button');
+	button.textContent = 'Sort Data';
+	button.addEventListener('click', function(){
+		graph.sortData();
+		graph.draw();
+	});
+
+	if (controlPanel) {
+		controlPanel.appendChild(button);
+	}
+}
+

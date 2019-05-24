@@ -56,6 +56,10 @@ class simpleBarGraph {
 		this.sampleData = randomDataGenerator();
 	}
 
+	sortData() {
+		this.sampleData = this.sampleData.sort();
+	}
+
 	draw() {
 		let _this = this;
 
@@ -68,6 +72,7 @@ class simpleBarGraph {
 		bars.enter()
 			.append('rect')
 			.merge(bars)
+			.transition()
 			.attr('fill', this.fillColour)
 			.attr('x', function(d,i){
 				return i * _this.bandWidth + _this.margin.left + _this.barPadding;
