@@ -22,6 +22,7 @@ let svg = d3.select('svg');
 
 // Transform center of pie chart to mid point in svg
 let container = svg.append('g')
+	.classed('container', true)
 	.attr("transform", 'translate(' + ((width / 2) + margin.left + margin.right ) + ',' + ((height / 2) + margin.top + margin.bottom) + ')');
 
 // Create d3 pie chart generator
@@ -55,7 +56,11 @@ function drawpiechart(){
 		.attr('fill', function(d, i){
 			return colours(i);	
 		})
-		.attr('d', arc);
+		.attr('d', arc)
+		.append('title')
+		.text(function(d){
+			return d.data.category;	
+		});
 
 };
 
