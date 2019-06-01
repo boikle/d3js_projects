@@ -1,2 +1,3 @@
-import { } from './js/simple_piechart.js';
+import { draw } from './js/simple_scatterplot.js';
 
+draw();
