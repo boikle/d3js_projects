@@ -43,6 +43,15 @@ let yAxis = g => g
 	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 	.call(d3.axisLeft().ticks(5).scale(scaleY));
 
+function calcRadius(data){
+	var weightedAvg;
+	var maxRadius = 9;
+	if (data.x && data.y) {
+		weightedAvg = ((data.x / 100) * 0.5) + ((data.y / 100) * 0.5);
+		return weightedAvg * maxRadius;
+	}
+}
+
 function draw(){ 
 	// Add x axis
 	svg.append('g')
@@ -60,7 +69,9 @@ function draw(){
 		.append('circle')
 		.merge(points)
 		.transition()
-		.attr('r', radius)
+		.attr('r', function(d){
+			return calcRadius(d);
+		})
 		.attr('cx', function(d){
 			return scaleX(d.x) + margin.left;
 		})
@@ -92,7 +103,6 @@ function draw(){
 		.text(function(d){
 			return d.x + ', ' + d.y;
 		});
-
 }
 
 export { draw };
