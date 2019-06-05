@@ -25,13 +25,17 @@ let svg = d3.select("svg")
 let pointsGroup = svg.append('g')
 	.classed('points', true);
 
-let toolTip = svg.append('text')
-	.classed('tooltip', true)
-	.attr("font-family", "sans-serif")
-    .attr("font-size", 11)
-	.attr('x', 0)
-	.attr('y', 0)
-	.style('opacity', 0);
+// let toolTip = svg.append('text')
+// 	.classed('tooltip', true)
+// 	.attr("font-family", "sans-serif")
+//     .attr("font-size", 11)
+// 	.attr('x', 0)
+// 	.attr('y', 0)
+// 	.style('opacity', 0);
+
+let toolTip = d3.select('body')
+	.append('div')
+	.attr('id', 'tooltip');
 
 let scaleX = d3.scaleLinear()
 	.domain([min, max])
@@ -50,19 +54,22 @@ let yAxis = g => g
 	.call(d3.axisLeft().ticks(5).scale(scaleY));
 
 function calcRadius(data){
-	var weightedAvg;
-	var maxRadius = 9;
+	var weightedAvg, radius;
+	var minRadius = 4;
+	var maxRadius = 10;
 	if (data.x && data.y) {
 		weightedAvg = ((data.x / 100) * 0.5) + ((data.y / 100) * 0.5);
-		return weightedAvg * maxRadius;
+		radius = weightedAvg * maxRadius;
+		return radius < minRadius ? minRadius : radius;
 	}
 }
 
 function showToolTip(text, coords){
+	var offset = 15;
 	toolTip.text(text)
 		.style('opacity', 1)
-		.attr('x',coords[0] + 5)
-		.attr('y',coords[1] - 5);
+		.style('left', coords[0] + offset + 'px')
+		.style('top', coords[1] - offset + 'px');
 }
 
 function hideToolTip(){
@@ -96,9 +103,6 @@ function draw(){
 		})
 		.attr('fill', 'darkcyan')
 		.attr('stroke', 'black')
-		.attr('data', function(d){
-			return '['+d.x+' ,'+d.y+']';	
-		})
 		.on('mousemove', function(d){
 			let coords = d3.mouse(this);
 			let label = d.x + ' ,' + d.y;
