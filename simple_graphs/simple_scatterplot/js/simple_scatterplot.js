@@ -21,11 +21,17 @@ let svg = d3.select("svg")
 	.attr('height', (height + margin.top + margin.bottom) + 'px')
 	.classed('scatter-plot', true);
 	
-// Add groups for points and labels
+// Add groups for points
 let pointsGroup = svg.append('g')
 	.classed('points', true);
-let labelsGroup = svg.append('g')
-	.classed('labels', true);
+
+let toolTip = svg.append('text')
+	.classed('tooltip', true)
+	.attr("font-family", "sans-serif")
+    .attr("font-size", 11)
+	.attr('x', 0)
+	.attr('y', 0)
+	.style('opacity', 0);
 
 let scaleX = d3.scaleLinear()
 	.domain([min, max])
@@ -52,6 +58,17 @@ function calcRadius(data){
 	}
 }
 
+function showToolTip(text, coords){
+	toolTip.text(text)
+		.style('opacity', 1)
+		.attr('x',coords[0] + 5)
+		.attr('y',coords[1] - 5);
+}
+
+function hideToolTip(){
+	toolTip.style('opacity', 0);
+}
+
 function draw(){ 
 	// Add x axis
 	svg.append('g')
@@ -68,7 +85,6 @@ function draw(){
 	points.enter()
 		.append('circle')
 		.merge(points)
-		.transition()
 		.attr('r', function(d){
 			return calcRadius(d);
 		})
@@ -80,29 +96,15 @@ function draw(){
 		})
 		.attr('fill', 'darkcyan')
 		.attr('stroke', 'black')
-		.attr('datat', function(d){
+		.attr('data', function(d){
 			return '['+d.x+' ,'+d.y+']';	
-		});
-
-
-	let labels = labelsGroup.selectAll('text')
-		.data(data);
-
-	labels.enter()
-		.append('text')
-		.merge(labels)
-		.transition()
-	    .attr("font-family", "sans-serif")
-      	.attr("font-size", 11)
-		.attr('x', function(d){
-			return scaleX(d.x) + margin.left + labelPadding;
 		})
-		.attr('y', function(d){
-			return scaleY(d.y) + margin.top - labelPadding;
+		.on('mousemove', function(d){
+			let coords = d3.mouse(this);
+			let label = d.x + ' ,' + d.y;
+			showToolTip(label, coords);
 		})
-		.text(function(d){
-			return d.x + ', ' + d.y;
-		});
+		.on('mouseout', hideToolTip);
 }
 
 export { draw };
