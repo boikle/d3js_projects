@@ -25,14 +25,6 @@ let svg = d3.select("svg")
 let pointsGroup = svg.append('g')
 	.classed('points', true);
 
-// let toolTip = svg.append('text')
-// 	.classed('tooltip', true)
-// 	.attr("font-family", "sans-serif")
-//     .attr("font-size", 11)
-// 	.attr('x', 0)
-// 	.attr('y', 0)
-// 	.style('opacity', 0);
-
 let toolTip = d3.select('body')
 	.append('div')
 	.attr('id', 'tooltip');
