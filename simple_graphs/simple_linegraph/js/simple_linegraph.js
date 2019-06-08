@@ -1,4 +1,4 @@
-import { linearDataset } from './random_data_generator.js';
+import { datasetGenerator, linear, exponential } from './data_generator.js';
 
 const margin = {
 	"top": 20,
@@ -10,7 +10,8 @@ const margin = {
 const height = 400 - margin.top - margin.bottom;
 const width = 800 - margin.left - margin.right;
 
-let data = linearDataset()
+let linearData = datasetGenerator(linear)
+let exponentialData = datasetGenerator(exponential)
 
 let svg = d3.select("svg")
 	.attr('width', (width + margin.left + margin.right) + 'px')
@@ -18,11 +19,11 @@ let svg = d3.select("svg")
 	.classed('line-graph', true);
 
 let scaleX = d3.scaleLinear()
-	.domain([d3.min(data, getXValue), d3.max(data, getXValue)])
+	.domain([d3.min(linearData, getXValue), d3.max(linearData, getXValue)])
 	.range([0, width]);
 
 let scaleY = d3.scaleLinear()
-	.domain([d3.min(data, getYValue), d3.max(data, getYValue)])
+	.domain([d3.min(linearData, getYValue), d3.max(linearData, getYValue)])
 	.range([height, 0]);
 
 let xAxis = g => g
