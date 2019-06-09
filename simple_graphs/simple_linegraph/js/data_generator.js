@@ -16,7 +16,7 @@ export function datasetGenerator(fName, sampleSize = 30) {
 
 export function linear(x) {
 	let m = 1;
-	let b = 0;
+	let b = 1;
 	let y = (m * x) + b;
 	return y;
 }
